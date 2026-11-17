@@ -1,0 +1,75 @@
+{% extends "agenda/base.html" %}
+{% block titulo %}Gestión | ReservaGol{% endblock %}
+{% block contenido %}
+<div class="titulo-fila">
+  <h1>Gestión de agenda</h1>
+  <div class="acciones"><a class="boton secundario" href="{% url 'nueva_cancha' %}">Nueva cancha</a><a class="boton" href="{% url 'nuevo_turno' %}">Publicar turno</a></div>
+</div>
+<nav class="pestanas" aria-label="Secciones de la agenda">
+  <a href="#reservas">Reservas</a><a href="#turnos">Turnos</a><a href="#canchas">Canchas</a>
+</nav>
+<form method="get" class="filtros panel">
+  {{ form.as_div }}
+  <button class="boton">Filtrar agenda</button>
+</form>
+<section id="reservas">
+  <h2>Reservas</h2>
+  <div class="panel tabla" tabindex="0" role="region" aria-label="Reservas">
+    <table>
+      <thead><tr><th>N.º</th><th>Cliente</th><th>Cancha y turno</th><th>Importe</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for r in reservas %}
+          <tr>
+            <td>#{{ r.pk }}</td><td>{{ r.cliente.nombre }}<small>{{ r.cliente.email }}{% if r.cliente.telefono %} · {{ r.cliente.telefono }}{% endif %}</small></td>
+            <td>{{ r.turno.cancha.nombre }}<small>{{ r.turno.inicio|date:"d/m/Y H:i" }} – {{ r.turno.fin|date:"H:i" }}</small></td>
+            <td>$ {{ r.importe_acordado|floatformat:2 }}</td>
+            <td><span class="estado {{ r.estado|lower }}">{{ r.get_estado_display }}</span>{% if r.motivo_cancelacion %}<small>{{ r.motivo_cancelacion }}</small>{% endif %}</td>
+            <td>{% if r.estado == "CONFIRMADA" %}
+              <div class="acciones">
+                <a href="{% url 'cancelar_admin' r.pk %}">Cancelar<span class="sr"> reserva #{{ r.pk }}</span></a>
+                {% if r.turno.fin <= ahora %}<form method="post" action="{% url 'completar' r.pk %}">{% csrf_token %}<button class="enlace">Completar<span class="sr"> reserva #{{ r.pk }}</span></button></form>{% endif %}
+              </div>
+            {% else %}—{% endif %}</td>
+          </tr>
+        {% empty %}<tr><td colspan="6">No hay reservas para estos filtros.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="turnos">
+  <h2>Turnos publicados</h2>
+  <div class="panel tabla" tabindex="0" role="region" aria-label="Turnos publicados">
+    <table>
+      <thead><tr><th>Cancha</th><th>Horario</th><th>Precio</th><th>Publicación</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for t in turnos %}
+          <tr>
+            <td>{{ t.cancha.nombre }}<small>{{ t.cancha.tipo }}</small></td>
+            <td>{{ t.inicio|date:"d/m/Y H:i" }} – {{ t.fin|date:"H:i" }}</td><td>$ {{ t.precio|floatformat:2 }}</td>
+            <td>{% if not t.habilitado %}Bloqueado<small>{{ t.motivo_bloqueo }}</small>{% elif not t.cancha.activa %}Cancha inactiva{% else %}Habilitado{% endif %}</td>
+            <td>{% if t.inicio > ahora %}
+              <div class="acciones">
+                <a href="{% url 'precio' t.pk %}">Cambiar precio</a>
+                {% if t.habilitado %}<a href="{% url 'bloquear' t.pk %}">Bloquear</a>
+                {% elif t.cancha.activa %}<form method="post" action="{% url 'habilitar' t.pk %}">{% csrf_token %}<button class="enlace">Habilitar</button></form>{% endif %}
+              </div>
+            {% else %}—{% endif %}</td>
+          </tr>
+        {% empty %}<tr><td colspan="5">No hay turnos para estos filtros.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="canchas">
+  <h2>Canchas</h2>
+  <div class="tarjetas">
+    {% for cancha in canchas %}
+      <article class="panel tarjeta">
+        <span class="meta">{{ cancha.tipo }} · {% if cancha.cubierta %}Techada{% else %}Al aire libre{% endif %}</span>
+        <h3>{{ cancha.nombre }}</h3>
+        <div class="fila"><span class="estado {% if cancha.activa %}confirmada{% else %}cancelada{% endif %}">{{ cancha.activa|yesno:"Activa,Inactiva" }}</span><a href="{% url 'editar_cancha' cancha.pk %}">Editar<span class="sr"> {{ cancha.nombre }}</span></a></div>
+      </article>
+    {% empty %}<p class="panel vacio">Todavía no hay canchas.</p>{% endfor %}
+  </div>
+</section>
+{% endblock %}

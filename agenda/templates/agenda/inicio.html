@@ -1,0 +1,34 @@
+{% extends "agenda/base.html" %}
+{% block titulo %}Disponibilidad | ReservaGol{% endblock %}
+{% block contenido %}
+<section class="portada">
+  <div>
+    <p class="modalidades">F5 <span>·</span> F7 <span>·</span> F8 <span>·</span> F11</p>
+    <h1>Reservá tu cancha</h1>
+    <p>Elegí una modalidad y una fecha para ver los turnos libres.</p>
+  </div>
+  <div class="cancha-grafica" aria-hidden="true"><i></i></div>
+</section>
+<section aria-labelledby="disponibilidad">
+  <h2 id="disponibilidad">Disponibilidad</h2>
+  <form method="get" class="filtros panel">
+    {{ form.as_div }}
+    <button class="boton">Buscar turnos</button>
+  </form>
+  <div class="tarjetas">
+    {% for turno in turnos %}
+      <article class="panel tarjeta">
+        <div class="meta">{{ turno.cancha.tipo.codigo }} · {% if turno.cancha.cubierta %}Techada{% else %}Al aire libre{% endif %}</div>
+        <h3>{{ turno.cancha.nombre }}</h3>
+        <p class="horario">{{ turno.inicio|date:"H:i" }} <span>–</span> {{ turno.fin|date:"H:i" }}</p>
+        <div class="fila">
+          <strong>$ {{ turno.precio|floatformat:2 }}</strong>
+          {% if user.rol != "ADMIN" %}<a class="boton boton-pequeno" href="{% url 'reservar' turno.pk %}">Reservar<span class="sr"> {{ turno.cancha.nombre }} a las {{ turno.inicio|date:"H:i" }}</span></a>{% endif %}
+        </div>
+      </article>
+    {% empty %}
+      <p class="panel vacio">No hay turnos disponibles para esta búsqueda.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

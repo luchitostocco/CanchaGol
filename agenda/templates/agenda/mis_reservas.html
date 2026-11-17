@@ -1,0 +1,20 @@
+{% extends "agenda/base.html" %}
+{% block titulo %}Mis reservas | ReservaGol{% endblock %}
+{% block contenido %}
+<div class="titulo-fila"><h1>Mis reservas</h1><a class="boton" href="{% url 'inicio' %}">Buscar turnos</a></div>
+<p>Podés cancelar hasta 24 horas antes del inicio.</p>
+<div class="tarjetas">
+  {% for r in reservas %}
+    <article class="panel tarjeta">
+      <div class="fila"><span class="meta">Reserva #{{ r.pk }}</span><span class="estado {{ r.estado|lower }}">{{ r.get_estado_display }}</span></div>
+      <h2>{{ r.turno.cancha.nombre }}</h2>
+      <p>{{ r.turno.inicio|date:"d/m/Y" }} · {{ r.turno.inicio|date:"H:i" }} – {{ r.turno.fin|date:"H:i" }}</p>
+      <p><strong>$ {{ r.importe_acordado|floatformat:2 }} ARS</strong></p>
+      {% if r.motivo_cancelacion %}<p>{{ r.motivo_cancelacion }}</p>{% endif %}
+      {% if r.cancelable %}
+        <form method="post" action="{% url 'cancelar' r.pk %}">{% csrf_token %}<button class="boton secundario">Cancelar reserva #{{ r.pk }}</button></form>
+      {% endif %}
+    </article>
+  {% empty %}<p class="panel vacio">Todavía no tenés reservas.</p>{% endfor %}
+</div>
+{% endblock %}

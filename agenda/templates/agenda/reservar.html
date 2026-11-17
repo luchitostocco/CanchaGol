@@ -1,0 +1,20 @@
+{% extends "agenda/base.html" %}
+{% load l10n %}
+{% block titulo %}Confirmar reserva | ReservaGol{% endblock %}
+{% block contenido %}
+<section class="panel formulario">
+  <a class="volver" href="{{ disponibilidad }}">← Ver otros turnos</a>
+  <h1>Confirmar reserva</h1>
+  <dl>
+    <dt>Cancha</dt><dd>{{ turno.cancha.nombre }} · {{ turno.cancha.tipo }}</dd>
+    <dt>Fecha</dt><dd>{{ turno.inicio|date:"l j \d\e F \d\e Y"|capfirst }}</dd>
+    <dt>Horario</dt><dd>{{ turno.inicio|date:"H:i" }} – {{ turno.fin|date:"H:i" }}</dd>
+    <dt>Importe</dt><dd>$ {{ turno.precio|floatformat:2 }} ARS · Pago presencial</dd>
+  </dl>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="precio" value="{{ turno.precio|unlocalize }}">
+    <button class="boton">Confirmar reserva</button>
+  </form>
+</section>
+{% endblock %}

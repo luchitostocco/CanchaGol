@@ -1,0 +1,14 @@
+{% extends "agenda/base.html" %}
+{% block titulo %}{{ titulo }} | ReservaGol{% endblock %}
+{% block contenido %}
+<section class="panel formulario">
+  <a class="volver" href="{% url volver %}">← Volver</a>
+  <h1>{{ titulo }}</h1>
+  {% if detalle %}<p>{{ detalle }}</p>{% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <button class="boton">{{ accion }}</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "agenda/base.html" %}
+{% block titulo %}Ingresar | ReservaGol{% endblock %}
+{% block contenido %}
+<section class="panel formulario">
+  <h1>Ingresar</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <button class="boton">Ingresar</button>
+  </form>
+  <p>¿Primera vez? <a href="{% url 'registro' %}">Creá tu cuenta</a>.</p>
+</section>
+{% endblock %}
