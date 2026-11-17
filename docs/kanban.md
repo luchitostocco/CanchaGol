@@ -4,11 +4,12 @@ Flujo **Por hacer → En curso → En revisión → Hecho**. Límite de dos tarj
 
 | Por hacer | En curso | En revisión | Hecho |
 | --- | --- | --- | --- |
-| [T04 · Publicar el repositorio](#t04--publicar-el-repositorio) | | | [T01 · Implementar el DER](#t01--implementar-el-der) |
+| | | | [T01 · Implementar el DER](#t01--implementar-el-der) |
 | T05 · Presentar y entregar el enlace en el campus | | | [HU-01 · Consultar y reservar](#hu-01--consultar-y-reservar-una-cancha) |
 | | | | [HU-02 · Mantener la agenda](#hu-02--mantener-la-agenda-del-complejo) |
 | | | | [T02 · Verificar persistencia y concurrencia](#t02--verificar-persistencia-y-concurrencia) |
 | | | | [T03 · Preparar la demo](demo.md) |
+| | | | [T04 · Publicar el repositorio](#t04--publicar-el-repositorio) |
 
 ## HU-01 · Consultar y reservar una cancha
 
@@ -47,8 +48,8 @@ Como administrador, quiero gestionar canchas, precios y horarios para ofrecer tu
 ## T04 · Publicar el repositorio
 
 - [x] Revisar los archivos ignorados y dejar los commits de las etapas.
-- [ ] Crear el repositorio en la cuenta de GitHub del autor y subir `main`.
-- [ ] Verificar el enlace y el acceso para la corrección.
+- [x] Crear el repositorio en la cuenta de GitHub del autor y subir `main`.
+- [x] Verificar el enlace y el acceso para la corrección. Repositorio público en https://github.com/luchitostocco/CanchaGol.
 
 ## Seguimiento del desarrollo
 
@@ -59,5 +60,6 @@ Como administrador, quiero gestionar canchas, precios y horarios para ofrecer tu
 | 17/11/2026 | HU-02 pasó a Hecho. HU-01 quedó en revisión de concurrencia. | Pruebas de Django de disponibilidad, permisos, bloqueo, importes y estados. |
 | 17/11/2026 | T03 pasó a Hecho. | Comando `demo` y guion de cinco minutos. |
 | 17/11/2026 | T02 y HU-01 pasaron a Hecho. | Pruebas en MySQL. Dos confirmaciones concurrentes produjeron una sola reserva. |
+| 17/11/2026 | T04 pasó a Hecho. | Publicación de `main` en GitHub y verificación de los commits remotos. |
 
 El trabajo avanzó en etapas dentro de una misma sesión. Las fechas corresponden al desarrollo real.
